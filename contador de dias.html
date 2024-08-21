@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem Regressiva para o Amor</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            background-color: #fff5f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 3em;
+            color: #ff6b81;
+            margin-bottom: 20px;
+        }
+        #countdown, #totalTime, #totalSeconds {
+            font-size: 2em;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+        .heart {
+            color: #ff6b81;
+            font-size: 5em;
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart">❤️</div>
+    <div id="countdown"></div>
+    <div id="totalTime"></div>
+    <div id="totalSeconds"></div>
+
+    <script>
+        // Defina a data do encontro
+        const targetDate = new Date('2024-08-27T19:25:00').getTime();
+
+        function pluralize(value, singular, plural) {
+            return value === 1 ? singular : plural;
+        }
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance <= 0) {
+                document.getElementById('countdown').innerHTML = 'O encontro é agora!';
+                document.getElementById('totalTime').innerHTML = '';
+                document.getElementById('totalSeconds').innerHTML = '';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Calcula o total de minutos, horas e segundos restantes
+            const totalMinutes = Math.floor(distance / (1000 * 60));
+            const totalHours = Math.floor(totalMinutes / 60);
+            const remainingMinutes = totalMinutes % 60;
+            const totalSeconds = Math.floor(distance / 1000);
+
+            document.getElementById('countdown').innerHTML =
+                `${days} ${pluralize(days, 'dia', 'dias')} ${hours} ${pluralize(hours, 'hora', 'horas')} ${minutes} ${pluralize(minutes, 'minuto', 'minutos')} ${seconds} ${pluralize(seconds, 'segundo', 'segundos')}`;
+            
+            document.getElementById('totalTime').innerHTML = 
+                `Faltam ${totalHours} ${pluralize(totalHours, 'hora', 'horas')} e ${remainingMinutes} ${pluralize(remainingMinutes, 'minuto', 'minutos')} no total`;
+
+            document.getElementById('totalSeconds').innerHTML =
+                `Faltam ${totalSeconds} ${pluralize(totalSeconds, 'segundo', 'segundos')} no total`;
+        }
+
+        // Atualize a contagem regressiva imediatamente e a cada segundo
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
